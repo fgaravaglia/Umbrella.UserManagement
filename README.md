@@ -12,6 +12,7 @@ Library to implement lightweight User Management domain
 To install it, use proper command:
 ```
 dotnet add package Umbrella.UserManagement 
+dotnet add package Umbrella.UserManagement.Firestore
 ```
 
 [![Nuget](https://img.shields.io/nuget/v/Umbrella.UserManagement.svg?style=plastic)](https://www.nuget.org/packages/Umbrella.UserManagement/)
