@@ -91,8 +91,8 @@ stages:
 
           - template: .\devops\templates\dotnet-build.yaml
             parameters:
-              projPath: src/Umbrella.UserManagement.Tests
-              projName: Umbrella.UserManagement.Tests
+              projPath: src/Umbrella.UserManagement.Firestore
+              projName: Umbrella.UserManagement.Firestore
               publishRequired: false
 
           - task: SonarCloudAnalyze@1
