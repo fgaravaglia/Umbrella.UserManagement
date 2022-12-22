@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Umbrella.Security
+namespace Umbrella.UserManagement
 {
     /// <summary>
     /// Abstraction for Storage of User definitions

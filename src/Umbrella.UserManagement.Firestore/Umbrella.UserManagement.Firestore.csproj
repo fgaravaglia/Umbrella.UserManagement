@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>CS8600</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Umbrella.Infrastructure.Firestore" Version="1.1.2188" />
+  </ItemGroup>
+
+<PropertyGroup>
+  <PackageId>Umbrella.UserManagement.Firestore</PackageId>
+  <Version>0.1.0.0</Version>
+  <VersionNumber>0.1.0.0</VersionNumber>
+  <Company>Innova Solutions</Company>
+  <Authors>FG</Authors>
+  <Description>Library to implement concrete components for UserManagement based on Google Firestore</Description>
+  <Copyright>FG 2022 - 2023</Copyright>
+  <PackageProjectUrl>https://github.com/fgaravaglia/Umbrella.UserManagement.Firestore</PackageProjectUrl>
+  <PackageReadmeFile>README.md</PackageReadmeFile>
+  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  <RepositoryType>git</RepositoryType>
+  <RepositoryUrl>https://github.com/fgaravaglia/Umbrella.UserManagement.Firestore</RepositoryUrl>
+  <icon>umbrella_framework_icon.png</icon>
+  <PackageReleaseNotes>
+  </PackageReleaseNotes>
+</PropertyGroup>
+
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\images\umbrella_framework_icon.png" Pack="true" PackagePath="" />
+
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Umbrella.UserManagement\Umbrella.UserManagement.csproj" />
+  </ItemGroup>
+
+</Project>

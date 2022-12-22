@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Umbrella.Security
+namespace Umbrella.UserManagement
 {
     /// <summary>
     /// Helper for identity

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-namespace Umbrella.Security
+namespace Umbrella.UserManagement
 {
     /// <summary>
     /// SImple implementation of Repo for users based on json file

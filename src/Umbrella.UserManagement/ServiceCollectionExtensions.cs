@@ -1,6 +1,7 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Umbrella.Security
+namespace Umbrella.UserManagement
 {
     /// <summary>
     /// Extensions to set up services at startup
