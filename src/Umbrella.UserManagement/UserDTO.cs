@@ -5,7 +5,10 @@ using System.Security.Claims;
 
 namespace Umbrella.UserManagement
 {
-    public class UserDTO
+    /// <summary>
+    /// Data Transfer Objecto to map properties of user
+    /// </summary>
+    public class UserDto
     {
         public string Name {get; set;}
 
@@ -21,7 +24,10 @@ namespace Umbrella.UserManagement
 
         public DateTime? LastUpdateDate {get; set;}
 
-        public UserDTO()
+        /// <summary>
+        /// Default constr
+        /// </summary>
+        public UserDto()
         {
             this.DisplayName = "";
             this.Name = "";
@@ -30,12 +36,17 @@ namespace Umbrella.UserManagement
             this.Roles = new  List<string>(){"USER"};
         }
 
-        public static UserDTO FromClaimsIdentity(ClaimsPrincipal identity)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        public static UserDto FromClaimsIdentity(ClaimsPrincipal identity)
         {
             if(identity is null)
                 throw new ArgumentNullException(nameof(identity));
             
-            var user = new UserDTO();
+            var user = new UserDto();
             user.Name = identity.Identity.Name;
 
             var nameClaim = identity.Claims.SingleOrDefault(x => x.Type == "name");
@@ -45,7 +56,10 @@ namespace Umbrella.UserManagement
             user.SetImageUrl(imageClaim is null ? "" : imageClaim.Value);
             return user;
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
         public void SetImageUrl(string url)
         {
             if(String.IsNullOrEmpty(url))

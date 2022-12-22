@@ -37,9 +37,9 @@ namespace Umbrella.UserManagement
         /// 
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UserDTO> GetAll()
+        public IEnumerable<UserDto> GetAll()
         {
-            var list = new List<UserDTO>();
+            var list = new List<UserDto>();
             string jsonString = "";
             if (!File.Exists(Path.Combine(this._Path, this._FileName)))
             {
@@ -63,7 +63,7 @@ namespace Umbrella.UserManagement
                 jsonString = File.ReadAllText(Path.Combine(this._Path, this._FileName));
             }
             var options = new JsonSerializerOptions { WriteIndented = true };
-            list = JsonSerializer.Deserialize<List<UserDTO>>(jsonString, options);
+            list = JsonSerializer.Deserialize<List<UserDto>>(jsonString, options);
 
             return list;
         }
@@ -72,7 +72,7 @@ namespace Umbrella.UserManagement
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public UserDTO GetByKey(string name)
+        public UserDto GetByKey(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
@@ -83,12 +83,12 @@ namespace Umbrella.UserManagement
         /// 
         /// </summary>
         /// <param name="user"></param>
-        public void Save(UserDTO user)
+        public void Save(UserDto user)
         {
             if (user is null)
                 throw new ArgumentNullException(nameof(user));
             if (string.IsNullOrEmpty(user.Name))
-                throw new ArgumentNullException(nameof(UserDTO) + ".Name");
+                throw new ArgumentNullException(nameof(user), "Name cannot be null");
 
             var roles = this.GetAll().ToList();
 
@@ -104,17 +104,14 @@ namespace Umbrella.UserManagement
                 existingItem.Roles.AddRange(user.Roles);
             }
 
-
             //serialize list
             SaveAll(roles);
-
-            return;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="users"></param>
-        public void SaveAll(IEnumerable<UserDTO> users)
+        public void SaveAll(IEnumerable<UserDto> users)
         {
             //serialize list
             var options = new JsonSerializerOptions { WriteIndented = true };
@@ -125,8 +122,6 @@ namespace Umbrella.UserManagement
             {
                 File.WriteAllText(Path.Combine(this._Path, this._FileName), jsonString);
             }
-
-            return;
         }
         /// <summary>
         /// Refreshes the details aftaer each login
@@ -147,7 +142,7 @@ namespace Umbrella.UserManagement
             var user = users.SingleOrDefault(x => x.Name == name);
             if (user is null)
             {
-                user = new UserDTO()
+                user = new UserDto()
                 {
                     Name = name,
                     DisplayName = displayName,
@@ -168,8 +163,6 @@ namespace Umbrella.UserManagement
             {
                 File.WriteAllText(Path.Combine(this._Path, this._FileName), jsonString);
             }
-
-            return;
         }
 
         /// <summary>
@@ -204,8 +197,6 @@ namespace Umbrella.UserManagement
             {
                 File.WriteAllText(Path.Combine(this._Path, this._FileName), jsonString);
             }
-
-            return;
         }
     }
 }

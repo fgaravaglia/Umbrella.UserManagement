@@ -11,18 +11,18 @@ namespace Umbrella.UserManagement
         /// GEts all avaialble users
         /// </summary>
         /// <returns></returns>
-        IEnumerable<UserDTO> GetAll();
+        IEnumerable<UserDto> GetAll();
         /// <summary>
         /// gets the specific user
         /// </summary>
         /// <param name="name">user name</param>
         /// <returns></returns>
-        UserDTO GetByKey(string name);
+        UserDto GetByKey(string name);
         /// <summary>
         /// saves the user
         /// </summary>
         /// <param name="user"></param>
-        void Save(UserDTO user);
+        void Save(UserDto user);
         /// <summary>
         /// Refreshes the details aftaer each login
         /// </summary>

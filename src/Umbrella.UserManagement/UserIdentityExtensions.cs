@@ -16,13 +16,13 @@ namespace Umbrella.UserManagement
         /// <returns></returns>
         public static string GetUserImageUrl(this ClaimsPrincipal principal)
         {
-            if(principal.Identity ==null)
+            if (principal.Identity == null)
                 throw new ArgumentNullException(nameof(principal));
-            
-            if(!principal.Identity.IsAuthenticated)
+
+            if (!principal.Identity.IsAuthenticated)
                 throw new InvalidOperationException($"User must to be logged!");
-            
-            if(principal.HasClaim(x => x.Type =="picture"))
+
+            if (principal.HasClaim(x => x.Type == "picture"))
                 return principal.Claims.Single(x => x.Type == "picture").Value;
 
             return "https://www.tutorialrepublic.com/examples/images/avatar/1.jpg";
@@ -35,14 +35,14 @@ namespace Umbrella.UserManagement
         /// <returns></returns>
         public static bool IsAdministrator(this ClaimsPrincipal principal)
         {
-             if(principal.Identity ==null)
-             return false;
+            if (principal.Identity == null)
+                return false;
 
-               if(!principal.Identity.IsAuthenticated)
-               return false;
-            
-             var roleClaims = principal.Claims.Where(x => x.Type == ClaimTypes.Role).ToList();
-             if(roleClaims.Count(x => x.Value == "ADMIN") > 0)
+            if (!principal.Identity.IsAuthenticated)
+                return false;
+
+            var roleClaims = principal.Claims.Where(x => x.Type == ClaimTypes.Role).ToList();
+            if (roleClaims.Any(x => x.Value == "ADMIN"))
                 return true;
             return false;
         }
@@ -54,7 +54,7 @@ namespace Umbrella.UserManagement
         /// <returns></returns>
         public static bool HasRoleOf(this ClaimsPrincipal principal, string role)
         {
-            if(String.IsNullOrEmpty(role))
+            if (String.IsNullOrEmpty(role))
                 return false;
 
             if (principal.Identity == null)
@@ -64,9 +64,9 @@ namespace Umbrella.UserManagement
                 return false;
 
             var roleClaims = principal.Claims.Where(x => x.Type == ClaimTypes.Role).ToList();
-            if (roleClaims.Count(x => x.Value == role) > 0)
+            if (roleClaims.Any(x => x.Value == role))
                 return true;
-                
+
             return false;
         }
     }
