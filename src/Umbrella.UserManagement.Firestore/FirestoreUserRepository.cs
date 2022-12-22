@@ -67,8 +67,6 @@ namespace Umbrella.UserManagement.Firestore
             user.SetImageUrl(imageUrl);
 
             this.Save(user);
-
-            return;
         }
         /// <summary>
         /// Saves the list of roles associated to the current user
@@ -86,14 +84,12 @@ namespace Umbrella.UserManagement.Firestore
 
             var user = this.GetById(name);
             if (user is null)
-                throw new ApplicationException($"User {name} not found");
+                throw new NullReferenceException($"User {name} not found");
 
             // set roles
             user.Roles.Clear();
             user.Roles.AddRange(roles.Distinct());
             this.Save(user);
-
-            return;
         }
     }
 }

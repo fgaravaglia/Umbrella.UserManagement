@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <NoWarn>CS8600</NoWarn>
+    <NoWarn>CS8600;S112</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
