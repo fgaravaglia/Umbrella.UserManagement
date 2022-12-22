@@ -7,7 +7,7 @@ namespace Umbrella.UserManagement.Firestore
     /// <summary>
     /// Firestore implemention of IUserRepository
     /// </summary>
-    public class FirestoreUserRepository : ModelEntityRepository<UserDTO, UserFirestoreDocument>, IUserRepository
+    public class FirestoreUserRepository : ModelEntityRepository<UserDto, UserFirestoreDocument>, IUserRepository
     {
         /// <summary>
         /// Default Constr
@@ -25,7 +25,7 @@ namespace Umbrella.UserManagement.Firestore
         /// </summary>
         /// <param name="name">user name</param>
         /// <returns></returns>
-       public  UserDTO GetByKey(string name)
+       public  UserDto GetByKey(string name)
        {
             return this.GetById(name);
        }
@@ -33,7 +33,7 @@ namespace Umbrella.UserManagement.Firestore
         /// saves the user
         /// </summary>
         /// <param name="user"></param>
-        new public void Save(UserDTO user)
+        new public void Save(UserDto user)
         {
             base.Save(user);
         }
@@ -55,7 +55,7 @@ namespace Umbrella.UserManagement.Firestore
             var user = this.GetById(name);
             if (user is null)
             {
-                user = new UserDTO()
+                user = new UserDto()
                 {
                     Name = name,
                     DisplayName = displayName,

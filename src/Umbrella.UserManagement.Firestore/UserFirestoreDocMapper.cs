@@ -7,19 +7,19 @@ namespace Umbrella.UserManagement.Firestore
     /// <summary>
     /// Mapper between DTO and Document for entity User
     /// </summary>
-    internal class UserFirestoreDocMapper : IFirestoreDocMapper<UserDTO, UserFirestoreDocument>
+    internal class UserFirestoreDocMapper : IFirestoreDocMapper<UserDto, UserFirestoreDocument>
     {
         /// <summary>
         /// Gets the DTO
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        public UserDTO FromFirestoreDoc(UserFirestoreDocument doc)
+        public UserDto FromFirestoreDoc(UserFirestoreDocument doc)
         {
             if(doc is null)
                 return null;
 
-            var dto = new UserDTO()
+            var dto = new UserDto()
             {     
                 Name = doc.Name,
                 DisplayName = doc.DisplayName,
@@ -37,7 +37,7 @@ namespace Umbrella.UserManagement.Firestore
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public UserFirestoreDocument ToFirestoreDocument(UserDTO dto)
+        public UserFirestoreDocument ToFirestoreDocument(UserDto dto)
         {
             if(dto is null)
                 return null;

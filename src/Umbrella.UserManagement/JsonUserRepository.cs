@@ -182,7 +182,7 @@ namespace Umbrella.UserManagement
             var users = this.GetAll().ToList();
             var user = users.SingleOrDefault(x => x.Name == name);
             if (user is null)
-                throw new ApplicationException($"User {name} not found");
+                throw new NullReferenceException($"User {name} not found");
 
             // set roles
             user.Roles.Clear();
