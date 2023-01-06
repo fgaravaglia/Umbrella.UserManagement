@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Umbrella.Infrastructure.Firestore" Version="1.1.2188" />
+    <PackageReference Include="Umbrella.Infrastructure.Firestore" Version="1.1.1.2367" />
   </ItemGroup>
 
 <PropertyGroup>

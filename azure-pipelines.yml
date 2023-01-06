@@ -28,7 +28,7 @@ parameters:
     default: 1
   - name: MinorVersion
     displayName: "Minor Version"
-    default: 0
+    default: 1
   - name: PatchVersion
     displayName: "Patch Version"
     default: 0
@@ -115,6 +115,7 @@ stages:
 
   - stage: PackAndPush
     dependsOn: Build
+    condition: in(dependencies.Build.result, 'Succeeded', 'SucceededWithIssues')
     jobs:
       - job: NugetPush
         steps:
