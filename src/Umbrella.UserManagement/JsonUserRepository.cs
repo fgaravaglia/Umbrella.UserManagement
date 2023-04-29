@@ -14,7 +14,7 @@ namespace Umbrella.UserManagement
         #region Attributes
         readonly string _Path;
         readonly string _FileName;
-        static object _Locker = new object();
+        readonly object _Locker = new object();
         #endregion
 
         /// <summary>
