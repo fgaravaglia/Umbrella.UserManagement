@@ -98,7 +98,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
             var user = GetUserByUsernameAndPassword(username, password);
             if(user == null)
             {
-                this._Logger.LogWwarning("User {username} not found", username);
+                this._Logger.LogWarning("User {username} not found", username);
                 return null;
             }
 
