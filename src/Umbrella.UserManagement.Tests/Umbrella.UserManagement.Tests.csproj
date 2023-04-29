@@ -18,11 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Umbrella.UserManagement\Umbrella.UserManagement.csproj" />
-
     <ProjectReference Include="..\Umbrella.UserManagement.Firestore\Umbrella.UserManagement.Firestore.csproj" />
-
     <ProjectReference Include="..\Umbrella.IdentityManagement\Umbrella.IdentityManagement.csproj" />
-
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,8 @@ namespace Umbrella.UserManagement.Firestore
             services.AddTransient<IUserRepository, FirestoreUserRepository>(x =>
             {
                 var logger = x.GetRequiredService<ILogger>();
-                return new FirestoreUserRepository(logger, gcpProjectId, environmentName);
+                var repo = new BaseRepository<UserFirestoreDocument>(gcpProjectId, "Users", false);
+                return new FirestoreUserRepository(logger, new UserFirestoreDocMapper(), repo);
             });
         }
     }

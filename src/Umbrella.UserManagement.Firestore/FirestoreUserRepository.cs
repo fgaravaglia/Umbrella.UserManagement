@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Umbrella.UserManagement;
 using Umbrella.Infrastructure.Firestore;
+using Umbrella.Infrastructure.Firestore.Abstractions;
 
 namespace Umbrella.UserManagement.Firestore
 {
@@ -15,8 +16,10 @@ namespace Umbrella.UserManagement.Firestore
         /// <param name="logger"></param>
         /// <param name="projectId"></param>
         /// <param name="dotnetEnv"></param>
-        public FirestoreUserRepository(ILogger logger, string projectId, string dotnetEnv) 
-            : base(logger, projectId, dotnetEnv, false, "Users", new UserFirestoreDocMapper())
+        public FirestoreUserRepository(ILogger logger, 
+                                        IFirestoreDocMapper<UserDto, UserFirestoreDocument> mapper,
+                                        IFirestoreDataRepository<UserFirestoreDocument> firestoreRepo)
+            : base(logger, mapper, firestoreRepo)
         {
         }
 
