@@ -18,7 +18,7 @@ namespace Umbrella.UserManagement.Configuration
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static UserManagementSettings GetAuthenticationSettings(this IConfiguration config)
+        public static UserManagementSettings GetUserManagementSettings(this IConfiguration config)
         {
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
