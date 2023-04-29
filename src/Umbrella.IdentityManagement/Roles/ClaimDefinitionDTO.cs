@@ -8,13 +8,13 @@ namespace Umbrella.IdentityManagement.Roles
     /// <summary>
     /// class to model a single Claim
     /// </summary>
-    public class ClaimDefinitionDTO
+    public class ClaimDefinitionDto
     {
         public string Type { get; set; }
 
         public string Value { get; set; }
 
-        public ClaimDefinitionDTO()
+        public ClaimDefinitionDto()
         {
             this.Type = "";
             this.Value = "";

@@ -24,7 +24,7 @@ namespace Umbrella.IdentityManagement.Roles
         /// CLaims related to current role
         /// </summary>
         /// <value></value>
-        public List<ClaimDefinitionDTO> Claims { get; set; }
+        public List<ClaimDefinitionDto> Claims { get; set; }
 
         /// <summary>
         /// 
@@ -33,7 +33,7 @@ namespace Umbrella.IdentityManagement.Roles
         {
             this.Role = "USER";
             this.DisplayText = "";
-            this.Claims = new List<ClaimDefinitionDTO>();
+            this.Claims = new List<ClaimDefinitionDto>();
         }
     }
 }

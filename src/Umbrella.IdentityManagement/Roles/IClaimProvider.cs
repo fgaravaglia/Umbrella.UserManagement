@@ -20,6 +20,6 @@ namespace Umbrella.IdentityManagement.Roles
         /// Gest the claims for each role
         /// </summary>
         /// <returns></returns>
-        Dictionary<string, List<ClaimDefinitionDTO>> GetClaims();
+        Dictionary<string, List<ClaimDefinitionDto>> GetClaims();
     }
 }

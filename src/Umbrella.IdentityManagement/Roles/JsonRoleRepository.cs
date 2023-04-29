@@ -13,8 +13,7 @@ namespace Umbrella.IdentityManagement.Roles
         #region Attributes
         readonly string _Path;
         readonly string _FileName;
-        readonly static object _Locker = new object();
-
+        readonly object _Locker = new object();
         readonly IEnumerable<IModuleClaimProvider> _ClaimsProviders;
         #endregion
 
@@ -89,9 +88,9 @@ namespace Umbrella.IdentityManagement.Roles
             {
                 Role = "ADMIN",
                 DisplayText = "System Administrator",
-                Claims = new List<ClaimDefinitionDTO>()
+                Claims = new List<ClaimDefinitionDto>()
                 {
-                    new ClaimDefinitionDTO(){Type="https://umbrella/adminTools", Value="W" },
+                    new ClaimDefinitionDto(){Type="https://umbrella/adminTools", Value="W" },
                 }
             });
 
