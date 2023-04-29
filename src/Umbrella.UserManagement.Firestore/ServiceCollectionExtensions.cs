@@ -5,7 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Umbrella.UserManagement.Firestore
 {
-    internal static class ServiceCollectionExtensions
+    /// <summary>
+    /// Manages the DI
+    /// </summary>
+    public static class ServiceCollectionExtensions
     {
         /// <summary>
         /// Adds the FIrestore implementation for User repository
