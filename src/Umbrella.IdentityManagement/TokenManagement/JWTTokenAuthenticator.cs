@@ -16,7 +16,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
     /// <summary>
     /// Authentication to implement JWT absic logic
     /// </summary>
-    public class JWTTokenAuthenticator : IJWTTokenAuthenticator
+    public class JwtTokenAuthenticator : IJwtTokenAuthenticator
     {
         readonly ILogger _Logger;
         readonly JwtSettings _Settings;
@@ -27,7 +27,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
         /// Default Constr
         /// </summary>
         /// <param name="key"></param>
-        public JWTTokenAuthenticator(ILogger logger, IUserRepository repo, IRoleRepository roleRepo, JwtSettings settings)
+        public JwtTokenAuthenticator(ILogger logger, IUserRepository repo, IRoleRepository roleRepo, JwtSettings settings)
         {
             this._Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._Repository = repo ?? throw new ArgumentNullException(nameof(repo));
@@ -41,6 +41,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
 
         Microsoft.IdentityModel.Tokens.SymmetricSecurityKey GenerateSecurityKey()
         {
+            this._Logger.LogInformation("Generating security key...");
             // Build the key
             var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._Settings.Secret));
             return securityKey;
@@ -48,6 +49,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
 
         IEnumerable<Claim> GetUserClaims(string username, IEnumerable<string> userRole)
         {
+            this._Logger.LogInformation("Retreiving claims for user {username}..", username);
             var role = userRole.FirstOrDefault() ?? "";
             if(String.IsNullOrEmpty(role))
             {
@@ -95,7 +97,10 @@ namespace Umbrella.IdentityManagement.TokenManagement
             // find user by credentials. if not found, return null token
             var user = GetUserByUsernameAndPassword(username, password);
             if(user == null)
+            {
+                this._Logger.LogWwarning("User {username} not found", username);
                 return null;
+            }
 
             // build the secret key
             var securityKey = GenerateSecurityKey();
@@ -107,6 +112,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
             var claims = GetUserClaims(user.Name, user.Roles);
 
             // create a token and returin it
+            this._Logger.LogInformation("Generating JWT...");
             var token = new JwtSecurityToken(this._Settings.ValidIssuer,
                 this._Settings.ValidAudience,
                 claims,
@@ -121,6 +127,8 @@ namespace Umbrella.IdentityManagement.TokenManagement
         /// <returns></returns>
         public string? ValidateToken(string token)
         {
+            this._Logger.LogInformation("GTrying to validate the token...");
+
             if (String.IsNullOrEmpty(token))
                 return null;
 
@@ -147,8 +155,9 @@ namespace Umbrella.IdentityManagement.TokenManagement
                 // return the user id from token
                 return userId;
             }
-            catch
+            catch(Exception ex)
             {
+                this._Logger.LogError(ex, "Unexpected error during JWT token validation: " + ex.Message);
                 return null;
             }
         }

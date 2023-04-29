@@ -8,7 +8,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
     /// <summary>
     /// Abstraction of JWT token authentication
     /// </summary>
-    public interface IJWTTokenAuthenticator
+    public interface IJwtTokenAuthenticator
     {
         /// <summary>
         /// Autnethicates the client by basic auth, generating back the token

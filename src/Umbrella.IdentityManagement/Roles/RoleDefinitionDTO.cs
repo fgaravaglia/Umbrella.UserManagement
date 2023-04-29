@@ -8,7 +8,7 @@ namespace Umbrella.IdentityManagement.Roles
     /// <summary>
     /// class to model a single role
     /// </summary>
-    public class RoleDefinitionDTO
+    public class RoleDefinitionDto
     {
         /// <summary>
         /// Code to identify role
@@ -29,7 +29,7 @@ namespace Umbrella.IdentityManagement.Roles
         /// <summary>
         /// 
         /// </summary>
-        public RoleDefinitionDTO()
+        public RoleDefinitionDto()
         {
             this.Role = "USER";
             this.DisplayText = "";

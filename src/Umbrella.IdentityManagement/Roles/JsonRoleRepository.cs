@@ -13,7 +13,7 @@ namespace Umbrella.IdentityManagement.Roles
         #region Attributes
         readonly string _Path;
         readonly string _FileName;
-        static object _Locker = new object();
+        readonly static object _Locker = new object();
 
         readonly IEnumerable<IModuleClaimProvider> _ClaimsProviders;
         #endregion
@@ -36,11 +36,11 @@ namespace Umbrella.IdentityManagement.Roles
             this._ClaimsProviders = claimsProviders ?? new List<IModuleClaimProvider>();
         }
 
-        public IEnumerable<RoleDefinitionDTO> GetAll()
+        public IEnumerable<RoleDefinitionDto> GetAll()
         {
             var jsonString = "";
             if (!File.Exists(Path.Combine(this._Path, this._FileName)))
-                return new List<RoleDefinitionDTO>();
+                return new List<RoleDefinitionDto>();
 
             //persist data
             lock (_Locker)
@@ -48,10 +48,10 @@ namespace Umbrella.IdentityManagement.Roles
                 jsonString = File.ReadAllText(Path.Combine(this._Path, this._FileName));
             }
             var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Deserialize<List<RoleDefinitionDTO>>(jsonString, options) ?? new List<RoleDefinitionDTO>();
+            return JsonSerializer.Deserialize<List<RoleDefinitionDto>>(jsonString, options) ?? new List<RoleDefinitionDto>();
         }
 
-        public RoleDefinitionDTO? GetByKey(string role)
+        public RoleDefinitionDto? GetByKey(string role)
         {
             if (string.IsNullOrEmpty(role))
                 throw new ArgumentNullException(nameof(role));
@@ -59,7 +59,7 @@ namespace Umbrella.IdentityManagement.Roles
             return GetAll().SingleOrDefault(x => x.Role == role);
         }
 
-        public void Save(RoleDefinitionDTO role)
+        public void Save(RoleDefinitionDto role)
         {
             if (role is null)
                 throw new ArgumentNullException(nameof(role));
@@ -77,7 +77,6 @@ namespace Umbrella.IdentityManagement.Roles
                 existingItem.Claims.Clear();
                 existingItem.Claims.AddRange(role.Claims);
             }
-            return;
         }
 
         /// <summary>
@@ -85,8 +84,8 @@ namespace Umbrella.IdentityManagement.Roles
         /// </summary>
         public virtual void InitializeRoles()
         {
-            var list = new List<RoleDefinitionDTO>();
-            list.Add(new RoleDefinitionDTO()
+            var list = new List<RoleDefinitionDto>();
+            list.Add(new RoleDefinitionDto()
             {
                 Role = "ADMIN",
                 DisplayText = "System Administrator",
@@ -118,7 +117,7 @@ namespace Umbrella.IdentityManagement.Roles
 
         #region Protected Methods
 
-        protected void SaveListOfRoles(List<RoleDefinitionDTO> roles)
+        protected void SaveListOfRoles(List<RoleDefinitionDto> roles)
         {
             //serialize list
             var options = new JsonSerializerOptions { WriteIndented = true };

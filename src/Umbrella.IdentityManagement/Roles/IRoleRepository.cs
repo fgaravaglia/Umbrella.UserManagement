@@ -14,18 +14,18 @@ namespace Umbrella.IdentityManagement.Roles
         /// GEts all avaialble roles
         /// </summary>
         /// <returns></returns>
-        IEnumerable<RoleDefinitionDTO> GetAll();
+        IEnumerable<RoleDefinitionDto> GetAll();
         /// <summary>
         /// gets the specific role
         /// </summary>
         /// <param name="role">role code</param>
         /// <returns></returns>
-        RoleDefinitionDTO? GetByKey(string role);
+        RoleDefinitionDto? GetByKey(string role);
         /// <summary>
         /// saves the role
         /// </summary>
         /// <param name="role"></param>
-        void Save(RoleDefinitionDTO role);
+        void Save(RoleDefinitionDto role);
         /// <summary>
         /// Regenrates the list of roles. USeful for startup
         /// </summary>
