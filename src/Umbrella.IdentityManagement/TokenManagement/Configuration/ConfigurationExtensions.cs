@@ -22,7 +22,7 @@ namespace Umbrella.IdentityManagement.TokenManagement.Configuration
             if(config == null)
                 throw new ArgumentNullException(nameof(config));
             // read the configuration
-            JwtSettings? settings =  config.GetSection(ClientAuthentication.ConfigurationExtensions.AUTHENTICATION_SECTION_NAME + ".JWT").Get<JwtSettings>();
+            JwtSettings? settings =  config.GetSection(ClientAuthentication.ConfigurationExtensions.AUTHENTICATION_SECTION_NAME + ":Jwt").Get<JwtSettings>();
             if (settings == null)
                 throw new InvalidOperationException($"Wrong appSettings file: section '{ClientAuthentication.ConfigurationExtensions.AUTHENTICATION_SECTION_NAME}:JwtOptions' is empty");
             return settings;
