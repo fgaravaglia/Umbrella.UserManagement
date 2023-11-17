@@ -100,8 +100,8 @@ namespace Umbrella.IdentityManagement.TokenManagement
             this._Logger.LogInformation("Start {method}", nameof(AuthenticateClient));
 
             // check clients
-            var exsistingClient = this._ClientSettings.SingleOrDefault(x => x.ClientID.Equals(clientId, StringComparison.OrdinalIgnoreCase)
-                                                                            && x.ApplicationID.Equals(secret, StringComparison.InvariantCultureIgnoreCase));
+            var exsistingClient = this._ClientSettings.SingleOrDefault(x => x.ClientID.Equals(clientId, StringComparison.InvariantCultureIgnoreCase)
+                                                                            && x.SecretID.Equals(secret, StringComparison.InvariantCultureIgnoreCase));
             if (exsistingClient == null)
                 throw new IdentityValidationException($"Client {clientId} unauthorized!");
 
