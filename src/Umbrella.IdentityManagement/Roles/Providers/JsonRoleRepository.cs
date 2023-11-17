@@ -91,7 +91,22 @@ namespace Umbrella.IdentityManagement.Roles.Providers
         /// <exception cref="NotImplementedException"></exception>
         public void Save(RoleDefinitionDto role)
         {
-            throw new NotImplementedException();
+            if (role is null)
+                throw new ArgumentNullException(nameof(role));
+            if (string.IsNullOrEmpty(role.Role))
+                throw new ArgumentNullException(nameof(role));
+
+            var roles = GetAll().ToList();
+
+            var existingItem = roles.SingleOrDefault(x => x.Role == role.Role);
+            if (existingItem == null)
+                roles.Add(role);
+            else
+            {
+                existingItem.DisplayText = role.DisplayText;
+                existingItem.Claims.Clear();
+                existingItem.Claims.AddRange(role.Claims);
+            }
         }
         /// <summary>
         /// <inheritdoc cref="IRoleRepository.InitializeRoles"/>

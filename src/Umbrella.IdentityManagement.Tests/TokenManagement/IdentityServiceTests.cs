@@ -46,7 +46,7 @@ namespace Umbrella.IdentityManagement.Tests.TokenManagement
                 }
             };
 
-            this._Service = new JWTIdentityService(Substitute.For<ILogger>(),
+            this._Service = new JwtIdentityService(Substitute.For<ILogger>(),
                                                 this._UserRepository,
                                                 this._ClaimProvider,
                                                 this._Options,
@@ -59,7 +59,7 @@ namespace Umbrella.IdentityManagement.Tests.TokenManagement
             //********** GIVEN
 
             //*********** WHEN
-            void test() => new JWTIdentityService(null,
+            void test() => new JwtIdentityService(null,
                                                 this._UserRepository,
                                                 this._ClaimProvider,
                                                 this._Options,
@@ -76,7 +76,7 @@ namespace Umbrella.IdentityManagement.Tests.TokenManagement
             //********** GIVEN
 
             //*********** WHEN
-            void test() => new JWTIdentityService(Substitute.For<ILogger>(),
+            void test() => new JwtIdentityService(Substitute.For<ILogger>(),
                             this._UserRepository,
                                                 null,
                                                 this._Options,
@@ -93,7 +93,7 @@ namespace Umbrella.IdentityManagement.Tests.TokenManagement
             //********** GIVEN
 
             //*********** WHEN
-            void test() => new JWTIdentityService(Substitute.For<ILogger>(), this._UserRepository,
+            void test() => new JwtIdentityService(Substitute.For<ILogger>(), this._UserRepository,
                                                 this._ClaimProvider,
                                                 null,
                                                 this._ClientSettings);
@@ -109,7 +109,7 @@ namespace Umbrella.IdentityManagement.Tests.TokenManagement
             //********** GIVEN
 
             //*********** WHEN
-            void test() => new JWTIdentityService(Substitute.For<ILogger>(),
+            void test() => new JwtIdentityService(Substitute.For<ILogger>(),
                                                  this._UserRepository, 
                                                  this._ClaimProvider,
                                                 this._Options,
@@ -126,7 +126,7 @@ namespace Umbrella.IdentityManagement.Tests.TokenManagement
             //********** GIVEN
 
             //*********** WHEN
-            void test() => new JWTIdentityService(Substitute.For<ILogger>(),
+            void test() => new JwtIdentityService(Substitute.For<ILogger>(),
                                                  this._UserRepository, 
                                                  this._ClaimProvider,
                                                 this._Options,
