@@ -45,9 +45,9 @@ namespace Umbrella.IdentityManagement.TokenManagement
             this._UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             this._ClaimProvider = claimprovider ?? throw new ArgumentNullException(nameof(claimprovider));
             this._JwtOptions = options ?? throw new ArgumentNullException(nameof(options));
-            if (clients == null || (clients != null && !clients.Any()))
+            this._ClientSettings = clients == null ? new List<ClientSettings>() : clients.ToList();
+            if (!this._ClientSettings.Any())
                 throw new ArgumentNullException(nameof(clients));
-            this._ClientSettings = clients?.ToList() ?? new List<ClientSettings>();
         }
 
         #region Private methods
