@@ -42,9 +42,9 @@ parameters:
 extends:
   template: dotnet-pakages-pipeline.1.2.yaml@coreTemplates
   parameters:
-    MajorVersion: 1
-    MinorVersion: 5
-    PatchVersion: 1
+    MajorVersion: 2
+    MinorVersion: 0
+    PatchVersion: 0
     SonarScanEnabled: ${{ parameters.inputSonarScanEnabled }}
     SonarSettings:
       ProjectKey: Umbrella.UserManagement
@@ -57,9 +57,15 @@ extends:
         name: Umbrella.UserManagement.Tests
         publishRequired: false
         isWebProj: False
+      - path: src/Umbrella.IdentityManagement.Tests
+        name: Umbrella.IdentityManagement.Tests
+        publishRequired: false
+        isWebProj: False
     ListOfProjToTest:
       - path: src/Umbrella.UserManagement.Tests
         name: Umbrella.UserManagement.Tests
+      - path: src/Umbrella.IdentityManagement.Tests
+        name: Umbrella.IdentityManagement.Tests
     ListOfProjToPublish:
       - path: src/Umbrella.UserManagement
         name: Umbrella.UserManagement

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
     /// <summary>
     /// Settings to store couple ClientID - AppId
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ClientSettings
     {
         /// <summary>

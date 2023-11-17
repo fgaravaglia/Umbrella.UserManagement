@@ -11,6 +11,11 @@ namespace Umbrella.IdentityManagement.Roles
     public interface IRoleRepository
     {
         /// <summary>
+        /// Id of application for which the repo is providing the roles
+        /// </summary>
+        string ApplicationId { get; }
+
+        /// <summary>
         /// GEts all avaialble roles
         /// </summary>
         /// <returns></returns>
@@ -30,5 +35,6 @@ namespace Umbrella.IdentityManagement.Roles
         /// Regenrates the list of roles. USeful for startup
         /// </summary>
         void InitializeRoles();
+
     }
 }

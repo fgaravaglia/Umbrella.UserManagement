@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
+using Umbrella.IdentityManagement.Claims;
 
 namespace Umbrella.IdentityManagement.Roles
 {
     /// <summary>
     /// class to model a single role
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class RoleDefinitionDto
     {
         /// <summary>
@@ -15,6 +14,14 @@ namespace Umbrella.IdentityManagement.Roles
         /// </summary>
         /// <value></value>
         public string Role { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? LastUpdatedOn { get; set; }
         /// <summary>
         /// USer firendly text for current role
         /// </summary>
@@ -33,6 +40,7 @@ namespace Umbrella.IdentityManagement.Roles
         {
             this.Role = "USER";
             this.DisplayText = "";
+            this.CreatedOn = DateTime.UtcNow;
             this.Claims = new List<ClaimDefinitionDto>();
         }
     }

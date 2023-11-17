@@ -1,0 +1,178 @@
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Umbrella.IdentityManagement.Claims;
+using Umbrella.IdentityManagement.ClientAuthentication;
+using Umbrella.IdentityManagement.ErrorManagement;
+using Umbrella.IdentityManagement.TokenManagement.Configuration;
+using Umbrella.UserManagement;
+using IUserRepository = Umbrella.UserManagement.IUserRepository;
+
+namespace Umbrella.IdentityManagement.TokenManagement
+{
+    /// <summary>
+    /// Authentication to implement JWT absic logic
+    /// </summary>
+    public class JWTIdentityService : IIdentityService
+    {
+        #region Fields
+        /// <summary>
+        /// Logger component
+        /// </summary>
+        readonly ILogger _Logger;
+        readonly IUserRepository _UserRepository;
+        readonly IClaimProvider _ClaimProvider;
+        readonly JwtSettings _JwtOptions;
+        readonly List<ClientSettings> _ClientSettings;
+        #endregion
+
+        /// <summary>
+        /// Default Constr
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="userRepository"></param>
+        /// <param name="claimprovider"></param>
+        /// <param name="options"></param>
+        /// <param name="clients"></param>
+        public JWTIdentityService(ILogger logger, IUserRepository userRepository, IClaimProvider claimprovider, JwtSettings options, IEnumerable<ClientSettings> clients)
+        {
+            this._Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this._UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this._ClaimProvider = claimprovider ?? throw new ArgumentNullException(nameof(claimprovider));
+            this._JwtOptions = options ?? throw new ArgumentNullException(nameof(options));
+            if (clients == null || (clients != null && !clients.Any()))
+                throw new ArgumentNullException(nameof(clients));
+            this._ClientSettings = clients?.ToList() ?? new List<ClientSettings>();
+        }
+
+        #region Private methods
+
+        string GenerateToken(List<Claim> claims)
+        {
+            this._Logger.LogInformation("Start {method}", nameof(GenerateToken));
+            // converts the key in byte to crete proper symmetric key
+            var symmetricKey = this._JwtOptions.GenerateSecurityKey();
+            var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
+            // generate the token
+            TimeSpan expiration = TimeSpan.FromMinutes(this._JwtOptions.TokenValidityInMinutes);
+            var token = new JwtSecurityToken(
+                                issuer: this._JwtOptions.ValidIssuer,
+                                audience: this._JwtOptions.ValidAudience,
+                                claims: claims,
+                                expires: DateTime.Now.Add(expiration),
+                                signingCredentials: signingCredentials);
+            var rawToken = new JwtSecurityTokenHandler().WriteToken(token);
+            this._Logger.LogInformation("End {method}", nameof(GenerateToken));
+            return rawToken;
+        }
+
+        UserDto? GetUserByUsernameAndPassword(string username, string password)
+        {
+            if (String.IsNullOrEmpty(username))
+                throw new ArgumentNullException(nameof(username));
+            if (String.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
+
+            return this._UserRepository.GetByKey(username);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// it tries to authenticate cliant application. if successfull, you get the token in response
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
+        public string AuthenticateClient(string clientId, string secret)
+        {
+            if (String.IsNullOrEmpty(clientId))
+                throw new ArgumentNullException(nameof(clientId));
+            if (String.IsNullOrEmpty(secret))
+                throw new ArgumentNullException(nameof(secret));
+
+            this._Logger.LogInformation("Start {method}", nameof(AuthenticateClient));
+
+            // check clients
+            var exsistingClient = this._ClientSettings.SingleOrDefault(x => x.ClientID.Equals(clientId, StringComparison.OrdinalIgnoreCase)
+                                                                            && x.ApplicationID.Equals(secret, StringComparison.InvariantCultureIgnoreCase));
+            if (exsistingClient == null)
+                throw new IdentityValidationException($"Client {clientId} unauthorized!");
+
+            // identify proper list of Claims
+            var claims = this._ClaimProvider.GetByIdentityName(clientId, exsistingClient.ApplicationID).ToList();
+
+            // returns the token
+            var token = GenerateToken(claims);
+            this._Logger.LogInformation("End {method}", nameof(AuthenticateClient));
+            return token;
+        }
+        /// <summary>
+        /// Autnethicates the client by basic auth, generating back the token
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns>JWT Token</returns>
+        public string? Authenticate(string username, string password)
+        {
+            if (String.IsNullOrEmpty(username))
+                throw new ArgumentNullException(nameof(username));
+            if (String.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
+
+            // find user by credentials. if not found, return null token
+            var user = GetUserByUsernameAndPassword(username, password);
+            if (user == null)
+            {
+                this._Logger.LogWarning("User {username} not found", username);
+                return null;
+            }
+
+            // build the secret key
+            var symmetricKey = this._JwtOptions.GenerateSecurityKey();
+
+            // build the credentials with claims
+            var credentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
+            // gets the user claims
+            var claims = this._ClaimProvider.GetByIdentityName(username,"DEFAULT").ToList();
+
+            // create a token and returin it
+            var token = GenerateToken(claims);
+            this._Logger.LogInformation("End {method}", nameof(Authenticate));
+            return token;
+        }
+        /// <summary>
+        /// Validates the token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public TokenValidationResponse ValidateToken(string token)
+        {
+            // set validation parameters
+            var validationParameters = this._JwtOptions.ToValidationParameters();
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                return new TokenValidationResponse(userId);
+            }
+            catch (SecurityTokenValidationException ex)
+            {
+                return new TokenValidationResponse("ERR-01", "Token is invalid! " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return new TokenValidationResponse("ERR-02", "Unexpected error during token validation: " + ex.Message);
+            }
+        }
+    }
+}

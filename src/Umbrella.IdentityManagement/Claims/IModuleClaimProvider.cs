@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Umbrella.IdentityManagement.Roles
+namespace Umbrella.IdentityManagement.Claims
 {
     /// <summary>
     /// Abstraction of component to inject claims from a module
@@ -20,6 +16,6 @@ namespace Umbrella.IdentityManagement.Roles
         /// Gest the claims for each role
         /// </summary>
         /// <returns></returns>
-        Dictionary<string, List<ClaimDefinitionDto>> GetClaims();
+        Dictionary<string, List<ClaimDefinitionDto>> GetClaimsPerRole();
     }
 }

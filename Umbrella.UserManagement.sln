@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbrella.UserManagement.Fir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbrella.UserManagement.Tests", "src\Umbrella.UserManagement.Tests\Umbrella.UserManagement.Tests.csproj", "{27483D49-F41A-4880-888D-0FCD9DD1D68F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbrella.IdentityManagement.Tests", "src\Umbrella.IdentityManagement.Tests\Umbrella.IdentityManagement.Tests.csproj", "{5613AF5A-9498-4D25-86BB-9DB85BB4130A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{27483D49-F41A-4880-888D-0FCD9DD1D68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27483D49-F41A-4880-888D-0FCD9DD1D68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27483D49-F41A-4880-888D-0FCD9DD1D68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5613AF5A-9498-4D25-86BB-9DB85BB4130A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5613AF5A-9498-4D25-86BB-9DB85BB4130A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5613AF5A-9498-4D25-86BB-9DB85BB4130A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5613AF5A-9498-4D25-86BB-9DB85BB4130A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{3810B819-A386-48FE-91A7-4BA5383ECBF3} = {A73328D9-D8C5-4026-9893-88D78AA34E54}
 		{0ACE88F5-7044-46D8-95F3-176F0979FB4D} = {A73328D9-D8C5-4026-9893-88D78AA34E54}
 		{27483D49-F41A-4880-888D-0FCD9DD1D68F} = {A73328D9-D8C5-4026-9893-88D78AA34E54}
+		{5613AF5A-9498-4D25-86BB-9DB85BB4130A} = {A73328D9-D8C5-4026-9893-88D78AA34E54}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C5A3E79-AD60-41B3-B62F-C91A400B4D23}

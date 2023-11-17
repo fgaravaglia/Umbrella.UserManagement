@@ -1,63 +1,83 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
+using Umbrella.IdentityManagement.Claims;
 
-namespace Umbrella.IdentityManagement.Roles
+namespace Umbrella.IdentityManagement.Roles.Providers
 {
     /// <summary>
     /// IMplementation of repository based on json file
     /// </summary>
-    public class JsonRoleRepository : IRoleRepository
+    public class JsonModuleRoleRepository : IRoleRepository
     {
         #region Attributes
         readonly string _Path;
         readonly string _FileName;
         readonly object _Locker = new object();
         readonly IEnumerable<IModuleClaimProvider> _ClaimsProviders;
+        readonly JsonSerializerOptions _SerializerOptions;
         #endregion
+
+        /// <summary>
+        /// Id of application for which the repo is providing the roles
+        /// </summary>
+        public string ApplicationId { get; private set; }
+
 
         /// <summary>
         /// /
         /// </summary>
         /// <param name="path"></param>
         /// <param name="fileName"></param>
-        public JsonRoleRepository(string path, string fileName, IEnumerable<IModuleClaimProvider> claimsProviders)
+        public JsonModuleRoleRepository(string path, string applicationId, IEnumerable<IModuleClaimProvider> claimsProviders)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
-
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-
             this._Path = path;
-            this._FileName = fileName;
+
+            if (string.IsNullOrEmpty(applicationId))
+                throw new ArgumentNullException(nameof(applicationId));
+            this.ApplicationId = applicationId;
+            _FileName = $"{this.ApplicationId}-Roles.json";
+            this._SerializerOptions = new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            };
             this._ClaimsProviders = claimsProviders ?? new List<IModuleClaimProvider>();
         }
-
+        /// <summary>
+        /// <inheritdoc cref="IRoleRepository.GetAll"/>
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<RoleDefinitionDto> GetAll()
         {
             var jsonString = "";
-            if (!File.Exists(Path.Combine(this._Path, this._FileName)))
+            if (!File.Exists(Path.Combine(_Path, _FileName)))
                 return new List<RoleDefinitionDto>();
 
             //persist data
             lock (_Locker)
             {
-                jsonString = File.ReadAllText(Path.Combine(this._Path, this._FileName));
+                jsonString = File.ReadAllText(Path.Combine(_Path, _FileName));
             }
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Deserialize<List<RoleDefinitionDto>>(jsonString, options) ?? new List<RoleDefinitionDto>();
+            return JsonSerializer.Deserialize<List<RoleDefinitionDto>>(jsonString, this._SerializerOptions) ?? new List<RoleDefinitionDto>();
         }
-
+        /// <summary>
+        /// <inheritdoc cref="IRoleRepository.GetByKey(string)"/>
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public RoleDefinitionDto? GetByKey(string role)
         {
             if (string.IsNullOrEmpty(role))
                 throw new ArgumentNullException(nameof(role));
 
-            return GetAll().SingleOrDefault(x => x.Role == role);
+            return GetAll().SingleOrDefault(x => x.Role.Equals(role, StringComparison.InvariantCultureIgnoreCase));
         }
-
+        /// <summary>
+        /// <inheritdoc cref="IRoleRepository.Save(RoleDefinitionDto)"/>
+        /// </summary>
+        /// <param name="role"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void Save(RoleDefinitionDto role)
         {
             if (role is null)
@@ -65,7 +85,7 @@ namespace Umbrella.IdentityManagement.Roles
             if (string.IsNullOrEmpty(role.Role))
                 throw new ArgumentNullException(nameof(role));
 
-            var roles = this.GetAll().ToList();
+            var roles = GetAll().ToList();
 
             var existingItem = roles.SingleOrDefault(x => x.Role == role.Role);
             if (existingItem == null)
@@ -95,18 +115,18 @@ namespace Umbrella.IdentityManagement.Roles
             });
 
             // add new claims for existing roles
-            foreach(var provider in this._ClaimsProviders)
+            foreach (var provider in _ClaimsProviders)
             {
-                var claimsPerRoles = provider.GetClaims();
-                foreach(var role in claimsPerRoles)
+                var claimsPerRoles = provider.GetClaimsPerRole();
+                foreach (var role in claimsPerRoles)
                 {
                     var existingRole = list.SingleOrDefault(x => x.Role.ToLowerInvariant() == role.Key.ToUpperInvariant());
-                    if(existingRole == null)
+                    if (existingRole == null)
                         continue;
 
-                    foreach(var claim in role.Value)
+                    foreach (var claim in role.Value)
                     {
-                        if(!existingRole.Claims.Any(x => x.Type == claim.Type))
+                        if (!existingRole.Claims.Any(x => x.Type == claim.Type))
                             existingRole.Claims.Add(claim);
                     }
                 }
@@ -118,14 +138,13 @@ namespace Umbrella.IdentityManagement.Roles
 
         protected void SaveListOfRoles(List<RoleDefinitionDto> roles)
         {
-            //serialize list
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(roles, options);
+            //serialize li
+            string jsonString = JsonSerializer.Serialize(roles, this._SerializerOptions);
 
             //persist data
             lock (_Locker)
             {
-                File.WriteAllText(Path.Combine(this._Path, this._FileName), jsonString);
+                File.WriteAllText(Path.Combine(_Path, _FileName), jsonString);
             }
 
         }

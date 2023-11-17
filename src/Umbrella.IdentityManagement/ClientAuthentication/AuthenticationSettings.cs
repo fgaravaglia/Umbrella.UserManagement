@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Umbrella.IdentityManagement.ClientAuthentication
 {
     /// <summary>
     /// Section Authetication from appSettings file
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class AuthenticationSettings
     {
         /// <summary>
@@ -15,11 +13,11 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
         /// </summary>
         /// <value></value>
         public List<ClientSettings> Clients { get; set; }
-    /// <summary>
-    /// Valid Channels
-    /// </summary>
-    /// <value></value>
-        public string ValidChannels{get; set;}
+        /// <summary>
+        /// Valid Channels
+        /// </summary>
+        /// <value></value>
+        public string ValidChannels { get; set; }
         /// <summary>
         /// EMpty COnstr
         /// </summary>
@@ -29,5 +27,5 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
             this.ValidChannels = "";
         }
     }
-    
+
 }

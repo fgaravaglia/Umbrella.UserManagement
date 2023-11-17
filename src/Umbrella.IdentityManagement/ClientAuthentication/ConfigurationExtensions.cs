@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
 namespace Umbrella.IdentityManagement.ClientAuthentication
@@ -11,7 +7,7 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
     /// </summary>
     public static class ConfigurationExtensions
     {
-        internal const string SECTION_NAME = "Authentication";
+        internal const string AUTHENTICATION_SECTION_NAME = "Authentication";
 
         /// <summary>
         /// Reads appsettings file
@@ -22,9 +18,25 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
         {
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
-            var settings = new AuthenticationSettings();
-            config.GetSection(SECTION_NAME).Bind(settings);
+            var settings =   config.GetSection(AUTHENTICATION_SECTION_NAME).Get< AuthenticationSettings>();
+            if(settings == null)
+                throw new InvalidOperationException($"Wrong appSettings file: section '{ClientAuthentication.ConfigurationExtensions.AUTHENTICATION_SECTION_NAME}' is empty");
             return settings;
+        }
+        /// <summary>
+        /// Gets the configured clients
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static IEnumerable<ClientSettings> GetClientSettings(this IConfiguration config)
+        {
+            var opt = config.GetSection(AUTHENTICATION_SECTION_NAME + ":Clients").Get<IEnumerable<ClientSettings>>();
+            if (opt == null)
+                throw new InvalidOperationException($"Wrong appSettings file: section '{AUTHENTICATION_SECTION_NAME}:Clients' is empty");
+            if (!opt.Any())
+                throw new InvalidOperationException($"Wrong appSettings file: section '{AUTHENTICATION_SECTION_NAME}:Clients' is empty");
+            return opt;
         }
 
     }

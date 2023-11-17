@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Umbrella.IdentityManagement.TokenManagement.Configuration
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ConfigurationExtensions
     {
         /// <summary>
@@ -14,17 +17,14 @@ namespace Umbrella.IdentityManagement.TokenManagement.Configuration
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static JwtSettings ReadJwtSettings(this IConfiguration config)
+        public static JwtSettings GetJwtSettings(this IConfiguration config)
         {
             if(config == null)
                 throw new ArgumentNullException(nameof(config));
             // read the configuration
-            JwtSettings settings = new JwtSettings();
-            var section = config.GetSection(ClientAuthentication.ConfigurationExtensions.SECTION_NAME + ".JWT");
-            if (section == null)
-                throw new InvalidOperationException($"Wrong Configuration: section JWT is missing");
-            // read and validate settings
-            section.Bind(settings);
+            JwtSettings? settings =  config.GetSection(ClientAuthentication.ConfigurationExtensions.AUTHENTICATION_SECTION_NAME + ".JWT").Get<JwtSettings>();
+            if (settings == null)
+                throw new InvalidOperationException($"Wrong appSettings file: section '{ClientAuthentication.ConfigurationExtensions.AUTHENTICATION_SECTION_NAME}:JwtOptions' is empty");
             return settings;
         }
 

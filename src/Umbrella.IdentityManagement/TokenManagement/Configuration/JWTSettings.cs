@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Umbrella.IdentityManagement.TokenManagement.Configuration
     /// "Secret": "JWTAuthenticationHIGHsecuredPasswordVVVp1OH7Xzyr"
     /// }
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class JwtSettings
     {
         /// <summary>
@@ -26,10 +28,10 @@ namespace Umbrella.IdentityManagement.TokenManagement.Configuration
         /// <value></value>
         public string ValidIssuer { get; set; }
         /// <summary>
-        /// Secret used to generate token
+        /// Secret used to generate token and sign in
         /// </summary>
         /// <value></value>
-        public string Secret { get; set; }
+        public string SigningKey { get; set; }
         /// <summary>
         /// Duration in Minutes of generated token
         /// </summary>
@@ -53,10 +55,10 @@ namespace Umbrella.IdentityManagement.TokenManagement.Configuration
         {
             this.ValidAudience = "";
             this.ValidIssuer = "";
-            this.Secret = "";
+            this.SigningKey = "";
             this.TokenValidityInMinutes = 15;
-            this.ValidateIssuer = false;
-            this.ValidateAudience = false;
+            this.ValidateIssuer = true;
+            this.ValidateAudience = true;
         }
     }
 }
