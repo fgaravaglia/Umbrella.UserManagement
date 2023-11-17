@@ -44,7 +44,7 @@ extends:
   parameters:
     MajorVersion: 1
     MinorVersion: 5
-    PatchVersion: 0
+    PatchVersion: 1
     SonarScanEnabled: ${{ parameters.inputSonarScanEnabled }}
     SonarSettings:
       ProjectKey: Umbrella.UserManagement

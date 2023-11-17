@@ -25,6 +25,11 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
         /// </summary>
         /// <value></value>
         public string ApplicationID { get; set; }
+        /// <summary>
+        /// secret
+        /// </summary>
+        /// <value></value>
+        public string SecretID { get; set; }
 
         /// <summary>
         /// empty COnstr
@@ -34,6 +39,7 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
             this.Name = "";
             this.ApplicationID = "";
             this.ClientID = "";
+            this.SecretID = "";
         }
     }
 }

@@ -15,13 +15,18 @@ namespace Umbrella.IdentityManagement.ClientAuthentication
         /// </summary>
         /// <value></value>
         public List<ClientSettings> Clients { get; set; }
-
+    /// <summary>
+    /// Valid Channels
+    /// </summary>
+    /// <value></value>
+        public string ValidChannels{get; set;}
         /// <summary>
         /// EMpty COnstr
         /// </summary>
         public AuthenticationSettings()
         {
             this.Clients = new List<ClientSettings>();
+            this.ValidChannels = "";
         }
     }
     
