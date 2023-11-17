@@ -126,7 +126,7 @@ namespace Umbrella.IdentityManagement.Roles.Providers
 
                     foreach (var claim in role.Value)
                     {
-                        if (!existingRole.Claims.Any(x => x.Type == claim.Type))
+                        if (!existingRole.Claims.Exists(x => x.Type == claim.Type))
                             existingRole.Claims.Add(claim);
                     }
                 }

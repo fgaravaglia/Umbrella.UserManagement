@@ -23,10 +23,10 @@ namespace Umbrella.IdentityManagement.Roles
         /// <summary>
         /// gets the specific role
         /// </summary>
-        /// <param name="role">role code</param>
+        /// <param name="key">role code</param>
         /// <returns></returns>
-        RoleDefinitionDto? GetByKey(string role);
-        /// <summary>
+        RoleDefinitionDto? GetByKey(string key);
+        /// <summary>s
         /// saves the role
         /// </summary>
         /// <param name="role"></param>

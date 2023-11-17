@@ -34,7 +34,6 @@ namespace Umbrella.IdentityManagement
                 var userRepo = x.GetRequiredService<IUserRepository>();
                 return new JwtIdentityService(logger, userRepo, claimProvider, config.GetJwtSettings(), config.GetClientSettings());
             });
-            return;
         }
         /// <summary>
         /// Adds dependencies for Identity
@@ -47,7 +46,6 @@ namespace Umbrella.IdentityManagement
 
             var applicationIds = config.GetClientSettings().Select(x => x.ApplicationID).Distinct().ToArray();
             services.AddIdentityInfrastructureServices(applicationIds, staticDataFolderPath);
-            return;
         }
 
         #region Private methods
@@ -70,7 +68,6 @@ namespace Umbrella.IdentityManagement
                 {
                     return new JsonRoleRepository(id, staticDataFolderPath);
                 });
-            return;
         }
         #endregion
     }

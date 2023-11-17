@@ -59,40 +59,49 @@ namespace Umbrella.IdentityManagement.Claims
                     this._Logger.LogWarning("User {name} not found. Supposing it is an Application, but not registered?", name);
                     throw new IdentityValidationException($"User {name} not found. Supposing it is an Application, but not registered");
                 }
-                else
-                {
-                    // read user and Roles
-                    var roles = new List<RoleDefinitionDto>();
-                    foreach (var r in user.Roles)
-                    {
-                        this._Logger.LogInformation("Retreiving role {name}...", r);
-                        var dto = this._RoleRepositoryFactory.Build(applicationId).GetByKey(r);
-                        if (dto == null)
-                        {
-                            this._Logger.LogWarning("Unable to find role {role}", r);
-                        }
-                        else
-                            roles.Add(dto);
-                    }
-                    this._Logger.LogInformation("Found {roles} Roles", roles.Count);
 
-                    // convert them in claims
-                    this._Logger.LogInformation("Generating claims...");
-                    claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Name));
-                    foreach (var role in roles)
+                // read user and Roles
+                var roles = GetRolesByUser(applicationId, user);
+
+                // convert them in claims
+                this._Logger.LogInformation("Generating claims...");
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Name));
+                foreach (var role in roles)
+                {
+                    foreach (var claim in role.Claims)
                     {
-                        foreach (var claim in role.Claims)
-                        {
-                            if (!claims.Any(x => x.Type == claim.Type))
-                                claims.Add(new Claim(claim.Type, claim.Value));
-                        }
+                        if (!claims.Exists(x => x.Type == claim.Type))
+                            claims.Add(new Claim(claim.Type, claim.Value));
                     }
-                    this._Logger.LogInformation("Generated {claims} claims", claims.Count);
                 }
+                this._Logger.LogInformation("Generated {claims} claims", claims.Count);
             }
+
 
 
             return claims;
         }
+
+        #region Private Methods
+
+        IEnumerable<RoleDefinitionDto> GetRolesByUser(string applicationId, UserDto user)
+        {
+            var roles = new List<RoleDefinitionDto>();
+            foreach (var r in user.Roles)
+            {
+                this._Logger.LogInformation("Retreiving role {name}...", r);
+                var dto = this._RoleRepositoryFactory.Build(applicationId).GetByKey(r);
+                if (dto == null)
+                {
+                    this._Logger.LogWarning("Unable to find role {role}", r);
+                }
+                else
+                    roles.Add(dto);
+            }
+            this._Logger.LogInformation("Found {roles} Roles", roles.Count);
+            return roles;
+        }
+
+        #endregion
     }
 }

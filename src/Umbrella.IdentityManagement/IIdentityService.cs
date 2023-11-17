@@ -59,7 +59,7 @@ namespace Umbrella.IdentityManagement
         public TokenValidationResponse(string userId)
         {
             if (string.IsNullOrEmpty(userId))
-                throw new ArgumentNullException("userId");
+                throw new ArgumentNullException(nameof(userId));
             UserIdentifier = userId;
             IsValid = true;
             ErrorCode = "";
