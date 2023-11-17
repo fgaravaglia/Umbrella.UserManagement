@@ -26,13 +26,13 @@ namespace Umbrella.IdentityManagement
         {
             services.AddTransient<IRoleRepositoryFactory, RoleRepositoryFactory>();
             services.AddTransient<IClaimProvider, ClaimProvider>();
-            services.AddTransient<IIdentityService, JWTIdentityService>(x =>
+            services.AddTransient<IIdentityService, JwtIdentityService>(x =>
             {
                 var config = x.GetRequiredService<IConfiguration>();
                 var logger = x.GetRequiredService<ILogger>();
                 var claimProvider = x.GetRequiredService<IClaimProvider>();
                 var userRepo = x.GetRequiredService<IUserRepository>();
-                return new JWTIdentityService(logger, userRepo, claimProvider, config.GetJwtSettings(), config.GetClientSettings());
+                return new JwtIdentityService(logger, userRepo, claimProvider, config.GetJwtSettings(), config.GetClientSettings());
             });
             return;
         }

@@ -18,7 +18,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
     /// <summary>
     /// Authentication to implement JWT absic logic
     /// </summary>
-    public class JWTIdentityService : IIdentityService
+    public class JwtIdentityService : IIdentityService
     {
         #region Fields
         /// <summary>
@@ -39,7 +39,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
         /// <param name="claimprovider"></param>
         /// <param name="options"></param>
         /// <param name="clients"></param>
-        public JWTIdentityService(ILogger logger, IUserRepository userRepository, IClaimProvider claimprovider, JwtSettings options, IEnumerable<ClientSettings> clients)
+        public JwtIdentityService(ILogger logger, IUserRepository userRepository, IClaimProvider claimprovider, JwtSettings options, IEnumerable<ClientSettings> clients)
         {
             this._Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
@@ -133,13 +133,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
                 this._Logger.LogWarning("User {username} not found", username);
                 return null;
             }
-
-            // build the secret key
-            var symmetricKey = this._JwtOptions.GenerateSecurityKey();
-
-            // build the credentials with claims
-            var credentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-
+            
             // gets the user claims
             var claims = this._ClaimProvider.GetByIdentityName(username,"DEFAULT").ToList();
 
