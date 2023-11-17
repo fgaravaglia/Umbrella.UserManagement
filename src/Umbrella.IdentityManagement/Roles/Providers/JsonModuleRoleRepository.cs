@@ -63,15 +63,15 @@ namespace Umbrella.IdentityManagement.Roles.Providers
         /// <summary>
         /// <inheritdoc cref="IRoleRepository.GetByKey(string)"/>
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="key"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public RoleDefinitionDto? GetByKey(string role)
+        public RoleDefinitionDto? GetByKey(string key)
         {
-            if (string.IsNullOrEmpty(role))
-                throw new ArgumentNullException(nameof(role));
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
 
-            return GetAll().SingleOrDefault(x => x.Role.Equals(role, StringComparison.InvariantCultureIgnoreCase));
+            return GetAll().SingleOrDefault(x => x.Role.Equals(key, StringComparison.InvariantCultureIgnoreCase));
         }
         /// <summary>
         /// <inheritdoc cref="IRoleRepository.Save(RoleDefinitionDto)"/>
