@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbrella.UserManagement.Fir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbrella.UserManagement.Tests", "src\Umbrella.UserManagement.Tests\Umbrella.UserManagement.Tests.csproj", "{27483D49-F41A-4880-888D-0FCD9DD1D68F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbrella.IdentityManagement.Tests", "src\Umbrella.IdentityManagement.Tests\Umbrella.IdentityManagement.Tests.csproj", "{5613AF5A-9498-4D25-86BB-9DB85BB4130A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbrella.IdentityManagement.Tests", "src\Umbrella.IdentityManagement.Tests\Umbrella.IdentityManagement.Tests.csproj", "{5613AF5A-9498-4D25-86BB-9DB85BB4130A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{8120D459-4822-421D-9867-F9A17F55D961}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

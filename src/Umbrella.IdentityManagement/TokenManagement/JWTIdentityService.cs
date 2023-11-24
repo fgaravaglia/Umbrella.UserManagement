@@ -90,7 +90,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
         /// <param name="clientId"></param>
         /// <param name="secret"></param>
         /// <returns></returns>
-        public string AuthenticateClient(string clientId, string secret)
+        public AuthenticationResponse AuthenticateClient(string clientId, string secret)
         {
             if (String.IsNullOrEmpty(clientId))
                 throw new ArgumentNullException(nameof(clientId));
@@ -108,10 +108,17 @@ namespace Umbrella.IdentityManagement.TokenManagement
             // identify proper list of Claims
             var claims = this._ClaimProvider.GetByIdentityName(clientId, exsistingClient.ApplicationID).ToList();
 
+            // create claimsIdentity
+            var identity = new ClaimsIdentity(claims, "jwt");
+
             // returns the token
             var token = GenerateToken(claims);
             this._Logger.LogInformation("End {method}", nameof(AuthenticateClient));
-            return token;
+            return new AuthenticationResponse()
+            { 
+                Token = token, 
+                Identity = identity
+            };
         }
         /// <summary>
         /// Autnethicates the client by basic auth, generating back the token
@@ -119,7 +126,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns>JWT Token</returns>
-        public string? Authenticate(string username, string password)
+        public AuthenticationResponse Authenticate(string username, string password)
         {
             if (String.IsNullOrEmpty(username))
                 throw new ArgumentNullException(nameof(username));
@@ -131,16 +138,22 @@ namespace Umbrella.IdentityManagement.TokenManagement
             if (user == null)
             {
                 this._Logger.LogWarning("User {username} not found", username);
-                return null;
+                return new AuthenticationResponse();
             }
             
             // gets the user claims
             var claims = this._ClaimProvider.GetByIdentityName(username,"DEFAULT").ToList();
+            // create claimsIdentity
+            var identity = new ClaimsIdentity(claims, "jwt");
 
             // create a token and returin it
             var token = GenerateToken(claims);
             this._Logger.LogInformation("End {method}", nameof(Authenticate));
-            return token;
+            return new AuthenticationResponse()
+            {
+                Token = token,
+                Identity = identity
+            };
         }
         /// <summary>
         /// Validates the token

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 [assembly: InternalsVisibleTo("Umbrella.IdentityManagement.Tests")]
 
@@ -16,14 +17,14 @@ namespace Umbrella.IdentityManagement
         /// <param name="clientId"></param>
         /// <param name="secret"></param>
         /// <returns></returns>
-        string AuthenticateClient(string clientId, string secret);
+        AuthenticationResponse AuthenticateClient(string clientId, string secret);
         /// <summary>
         /// Autnethicates the user by basic auth, generating back the token
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns>JWT Token</returns>
-        string? Authenticate(string username, string password);
+        AuthenticationResponse Authenticate(string username, string password);
         /// <summary>
         /// VAlidates the token, extracting the user id. if token is not valid, the returned id is null
         /// </summary>
@@ -35,46 +36,19 @@ namespace Umbrella.IdentityManagement
     /// 
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class TokenValidationResponse
-    {
+    public class AuthenticationResponse
+    { 
         /// <summary>
-        /// ID of user, if token is valid
+        /// Authentication Token
         /// </summary>
-        public string? UserIdentifier { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsValid { get; set; }
+        public string? Token { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public string ErrorCode { get; set; }
+        public ClaimsIdentity? Identity { get; set; }
         /// <summary>
-        /// 
+        /// True if authentication is succesfull
         /// </summary>
-        public string Message { get; set; }
-        /// <summary>
-        /// Constr for succesful validation
-        /// </summary>
-        public TokenValidationResponse(string userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentNullException(nameof(userId));
-            UserIdentifier = userId;
-            IsValid = true;
-            ErrorCode = "";
-            Message = "";
-        }
-        /// <summary>
-        /// Constr for failed validatoin
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
-        public TokenValidationResponse(string code, string message)
-        {
-            IsValid = false;
-            ErrorCode = code;
-            Message = message;
-        }
+        public bool IsAuthenticated { get { return this.Identity != null; } }
     }
 }
