@@ -34,6 +34,10 @@ parameters:
     displayName: "Enable Sonar Scan"
     type: boolean
     default: True
+  - name: inputOwaspScanEnabled
+    displayName: "Enable OWASP Scan"
+    type: boolean
+    default: true
   - name: inputPublishPackage
     displayName: "Publish Package to Nuget.Org"
     type: boolean
@@ -50,6 +54,7 @@ extends:
       ProjectKey: Umbrella.UserManagement
       ProjectName: Umbrella.UserManagement
       TestReportFileName: cobertura.xml
+    OwaspScanEnabled: ${{ parameters.inputOwaspScanEnabled }}
     PublishPackage: ${{ parameters.inputPublishPackage }}
     NugetSecretFileName: Nuget.apikey.txt
     ListOfProjToBuild:
