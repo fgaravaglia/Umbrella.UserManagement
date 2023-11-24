@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace Umbrella.IdentityManagement
         /// 
         /// </summary>
         public bool IsValid { get; set; }
+/// <summary>
+/// 
+/// </summary>
+/// <value></value>
+        public IEnumerable<Claim> Claims{get; set;}
         /// <summary>
         /// 
         /// </summary>
@@ -32,7 +38,9 @@ namespace Umbrella.IdentityManagement
         /// <summary>
         /// Constr for succesful validation
         /// </summary>
-        public TokenValidationResponse(string userId)
+        /// <param name="userId"></param>
+        /// <param name="claims"></param>
+        public TokenValidationResponse(string userId, IEnumerable<Claim> claims)
         {
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentNullException(nameof(userId));
@@ -40,6 +48,9 @@ namespace Umbrella.IdentityManagement
             IsValid = true;
             ErrorCode = "";
             Message = "";
+            var newListOfCLaims = new List<Claim>();
+            newListOfCLaims.AddRange(claims);
+            this.Claims = newListOfCLaims;
         }
         /// <summary>
         /// Constr for failed validatoin
@@ -51,6 +62,7 @@ namespace Umbrella.IdentityManagement
             IsValid = false;
             ErrorCode = code;
             Message = message;
+            Claims = new List<Claim>();
         }
     }
 }

@@ -170,7 +170,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
                 tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                return new TokenValidationResponse(userId);
+                return new TokenValidationResponse(userId, jwtToken.Claims);
             }
             catch (SecurityTokenValidationException ex)
             {
