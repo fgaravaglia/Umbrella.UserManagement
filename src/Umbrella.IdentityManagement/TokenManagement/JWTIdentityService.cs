@@ -170,7 +170,10 @@ namespace Umbrella.IdentityManagement.TokenManagement
                 tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                return new TokenValidationResponse(userId, jwtToken.Claims);
+                var userInfo = this._UserRepository.GetByKey(userId);
+                if(userInfo == null)
+                    throw new InvalidOperationException($"Unable to find valid user {userId}");
+                return new TokenValidationResponse(jwtToken.Claims, userInfo);
             }
             catch (SecurityTokenValidationException ex)
             {

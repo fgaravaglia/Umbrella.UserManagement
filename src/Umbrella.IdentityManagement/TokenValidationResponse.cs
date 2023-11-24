@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Umbrella.UserManagement;
 
 namespace Umbrella.IdentityManagement
 {
@@ -22,11 +23,16 @@ namespace Umbrella.IdentityManagement
         /// 
         /// </summary>
         public bool IsValid { get; set; }
-/// <summary>
-/// 
-/// </summary>
-/// <value></value>
-        public IEnumerable<Claim> Claims{get; set;}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public IEnumerable<Claim> Claims { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public UserDto? UserInformation { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -38,13 +44,17 @@ namespace Umbrella.IdentityManagement
         /// <summary>
         /// Constr for succesful validation
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="claims"></param>
-        public TokenValidationResponse(string userId, IEnumerable<Claim> claims)
+        /// <param name="user"></param>
+        public TokenValidationResponse(IEnumerable<Claim> claims, UserDto user)
         {
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentNullException(nameof(userId));
-            UserIdentifier = userId;
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            if (string.IsNullOrEmpty(user.Name))
+                throw new ArgumentNullException(nameof(user), "Name cannot be null");
+            this.UserInformation = user;
+            this.UserIdentifier = user.Name;
+
             IsValid = true;
             ErrorCode = "";
             Message = "";
