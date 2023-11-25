@@ -7,6 +7,7 @@ namespace Umbrella.IdentityManagement.Roles
 {
     /// <summary>
     /// Abstarction for Storage of Role definitions
+    
     /// </summary>
     public interface IRoleRepository
     {

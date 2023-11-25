@@ -1,16 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Umbrella.IdentityManagement.Roles.Providers
 {
     /// <summary>
     /// Concrete implementatoin of provider base don Json files
     /// </summary>
+    /// <example>
+    /// <code>
+    /// [
+    ///   {
+    ///     "Role": "MYROLE",
+    ///     "CreatedOn": "2023-11-25T20:09:03.1109311Z",
+    ///     "LastUpdatedOn": null,
+    ///     "DisplayText": "",
+    ///     "Claims": [
+    ///         { "Type": "https://umbrella/invoke-api",  Value": "R" },
+    ///         { "Type": "https://umbrella/invoke-api/prod", "Value": "R" }
+    ///      ]
+    ///    }
+    /// ]
+    /// </code>
+    /// </example
     [ExcludeFromCodeCoverage]
     internal class JsonRoleRepository : IRoleRepository
     {
@@ -106,6 +117,12 @@ namespace Umbrella.IdentityManagement.Roles.Providers
                 existingItem.DisplayText = role.DisplayText;
                 existingItem.Claims.Clear();
                 existingItem.Claims.AddRange(role.Claims);
+            }
+
+            var jsonContent = JsonSerializer.Serialize<IEnumerable<RoleDefinitionDto>>(roles, this._SerializerOptions);
+            lock (_Locker)
+            {
+                File.WriteAllText(Path.Combine(this._FolderPath, _FileName), jsonContent);
             }
         }
         /// <summary>

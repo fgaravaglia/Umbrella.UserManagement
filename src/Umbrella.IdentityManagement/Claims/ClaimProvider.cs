@@ -76,9 +76,6 @@ namespace Umbrella.IdentityManagement.Claims
                 }
                 this._Logger.LogInformation("Generated {claims} claims", claims.Count);
             }
-
-
-
             return claims;
         }
 

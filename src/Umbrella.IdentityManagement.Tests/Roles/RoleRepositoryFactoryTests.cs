@@ -1,10 +1,37 @@
 ﻿using NSubstitute;
 using Umbrella.IdentityManagement.Roles;
+using Umbrella.IdentityManagement.Roles.Providers;
 
 namespace Umbrella.IdentityManagement.Tests.Roles
 {
     public class RoleRepositoryFactoryTests
     {
+        string _TestFolderPath;
+
+        [SetUp]
+        public void Setup()
+        {
+            this._TestFolderPath = Path.Combine(Environment.CurrentDirectory, nameof(RoleRepositoryFactoryTests));
+            if(!Directory.Exists(this._TestFolderPath))
+                Directory.CreateDirectory(this._TestFolderPath);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            var files = new DirectoryInfo(this._TestFolderPath).GetFiles();
+            foreach(var f in files)
+            {
+                try
+                {
+                    f.Delete();
+                }
+                catch
+                {
+                    Console.WriteLine("Error during deleting file " + f.Name);
+                }
+            }
+        }
 
         [Test]
         public void Constr_ThrowsEx_IfRepositoriesIsNull()
@@ -97,6 +124,27 @@ namespace Umbrella.IdentityManagement.Tests.Roles
             Assert.AreEqual(applicationId, newRepo.ApplicationId);
             Assert.Pass();
         }
+
+        [Test]
+        public void Build_Returns_JsonRepoForTargetApp()
+        {
+            //********** GIVEN
+            string applicationId = "app";
+            var repo = new JsonRoleRepository(applicationId, this._TestFolderPath);
+            var factory = new RoleRepositoryFactory(new List<IRoleRepository>() { repo });
+
+            //*********** WHEN
+            var newRepo = factory.Build(applicationId);
+
+            //*********** Assert
+            Assert.IsNotNull(newRepo);
+            Assert.AreEqual(applicationId, newRepo.ApplicationId);
+            Assert.That(newRepo, Is.TypeOf< JsonRoleRepository>());
+            Assert.Pass();
+        }
+
     }
+
 }
+
 
