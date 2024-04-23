@@ -48,12 +48,11 @@ namespace Umbrella.IdentityManagement
             services.AddIdentityInfrastructureServices(applicationIds, staticDataFolderPath);
         }
 
-        #region Private methods
         /// <summary>
         /// Adds dependencies for Identity
         /// </summary>
         /// <param name="services"></param>
-        static void AddIdentityInfrastructureServices(this IServiceCollection services, string[] applicationIds, string staticDataFolderPath)
+        public static void AddIdentityInfrastructureServices(this IServiceCollection services, string[] applicationIds, string staticDataFolderPath)
         {
             if (applicationIds == null)
                 throw new ArgumentNullException(nameof(applicationIds));
@@ -69,6 +68,6 @@ namespace Umbrella.IdentityManagement
                     return new JsonRoleRepository(id, staticDataFolderPath);
                 });
         }
-        #endregion
+
     }
 }
