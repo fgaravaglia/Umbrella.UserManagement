@@ -54,7 +54,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
 
         string GenerateToken(List<Claim> claims)
         {
-            this._Logger.LogInformation("Start {method}", nameof(GenerateToken));
+            this._Logger.LogInformation("Start {Method}", nameof(GenerateToken));
             // converts the key in byte to crete proper symmetric key
             var symmetricKey = this._JwtOptions.GenerateSecurityKey();
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
@@ -68,7 +68,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
                                 expires: DateTime.Now.Add(expiration),
                                 signingCredentials: signingCredentials);
             var rawToken = new JwtSecurityTokenHandler().WriteToken(token);
-            this._Logger.LogInformation("End {method}", nameof(GenerateToken));
+            this._Logger.LogInformation("End {Method}", nameof(GenerateToken));
             return rawToken;
         }
 
@@ -97,7 +97,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
             if (String.IsNullOrEmpty(secret))
                 throw new ArgumentNullException(nameof(secret));
 
-            this._Logger.LogInformation("Start {method}", nameof(AuthenticateClient));
+            this._Logger.LogInformation("Start {Method}", nameof(AuthenticateClient));
 
             // check clients
             var exsistingClient = this._ClientSettings.SingleOrDefault(x => x.ClientID.Equals(clientId, StringComparison.InvariantCultureIgnoreCase)
@@ -113,7 +113,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
 
             // returns the token
             var token = GenerateToken(claims);
-            this._Logger.LogInformation("End {method}", nameof(AuthenticateClient));
+            this._Logger.LogInformation("End {Method}", nameof(AuthenticateClient));
             return new AuthenticationResponse()
             { 
                 Token = token, 
@@ -137,7 +137,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
             var user = GetUserByUsernameAndPassword(username, password);
             if (user == null)
             {
-                this._Logger.LogWarning("User {username} not found", username);
+                this._Logger.LogWarning("User {Username} not found", username);
                 return new AuthenticationResponse();
             }
             
@@ -148,7 +148,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
 
             // create a token and returin it
             var token = GenerateToken(claims);
-            this._Logger.LogInformation("End {method}", nameof(Authenticate));
+            this._Logger.LogInformation("End {Method}", nameof(Authenticate));
             return new AuthenticationResponse()
             {
                 Token = token,

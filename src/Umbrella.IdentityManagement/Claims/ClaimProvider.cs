@@ -51,12 +51,12 @@ namespace Umbrella.IdentityManagement.Claims
                 ["Method"] = nameof(GetByIdentityName)
             }))
             {
-                this._Logger.LogInformation("Retreiving user by name {name}", name);
+                this._Logger.LogInformation("Retreiving user by name {Name}", name);
                 var user = _UserRepository.GetByKey(name);
                 if (user == null)
                 {
                     // it is an application
-                    this._Logger.LogWarning("User {name} not found. Supposing it is an Application, but not registered?", name);
+                    this._Logger.LogWarning("User {Name} not found. Supposing it is an Application, but not registered?", name);
                     throw new IdentityValidationException($"User {name} not found. Supposing it is an Application, but not registered");
                 }
 
@@ -74,7 +74,7 @@ namespace Umbrella.IdentityManagement.Claims
                             claims.Add(new Claim(claim.Type, claim.Value));
                     }
                 }
-                this._Logger.LogInformation("Generated {claims} claims", claims.Count);
+                this._Logger.LogInformation("Generated {Claims} claims", claims.Count);
             }
             return claims;
         }
@@ -86,16 +86,16 @@ namespace Umbrella.IdentityManagement.Claims
             var roles = new List<RoleDefinitionDto>();
             foreach (var r in user.Roles)
             {
-                this._Logger.LogInformation("Retreiving role {name}...", r);
+                this._Logger.LogInformation("Retreiving role {Name}...", r);
                 var dto = this._RoleRepositoryFactory.Build(applicationId).GetByKey(r);
                 if (dto == null)
                 {
-                    this._Logger.LogWarning("Unable to find role {role}", r);
+                    this._Logger.LogWarning("Unable to find role {Role}", r);
                 }
                 else
                     roles.Add(dto);
             }
-            this._Logger.LogInformation("Found {roles} Roles", roles.Count);
+            this._Logger.LogInformation("Found {Roles} Roles", roles.Count);
             return roles;
         }
 
