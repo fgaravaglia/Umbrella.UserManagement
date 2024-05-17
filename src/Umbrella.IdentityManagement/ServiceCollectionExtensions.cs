@@ -16,13 +16,13 @@ namespace Umbrella.IdentityManagement
     /// Estensions to register components into DI
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public static  class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
         /// <summary>
         /// Adds dependencies for Identity
         /// </summary>
         /// <param name="services"></param>
-        public static void AddIdentityServices(this IServiceCollection services)
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
         {
             services.AddTransient<IRoleRepositoryFactory, RoleRepositoryFactory>();
             services.AddTransient<IClaimProvider, ClaimProvider>();
@@ -34,25 +34,26 @@ namespace Umbrella.IdentityManagement
                 var userRepo = x.GetRequiredService<IUserRepository>();
                 return new JwtIdentityService(logger, userRepo, claimProvider, config.GetJwtSettings(), config.GetClientSettings());
             });
+            return services;
         }
         /// <summary>
-        /// Adds dependencies for Identity
+        /// Adds persistence for roles on json files, using one file per each application
         /// </summary>
         /// <param name="services"></param>
-        public static void AddIdentityInfrastructureServices(this IServiceCollection services, IConfiguration config, string staticDataFolderPath)
+        public static IServiceCollection UsingRoleJsonPersistence(this IServiceCollection services, IConfiguration config, string staticDataFolderPath)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (config == null) throw new ArgumentNullException(nameof(config));
 
             var applicationIds = config.GetClientSettings().Select(x => x.ApplicationID).Distinct().ToArray();
-            services.AddIdentityInfrastructureServices(applicationIds, staticDataFolderPath);
-        }
+            return services.UsingRoleJsonPersistence(applicationIds, staticDataFolderPath);
 
+        }
         /// <summary>
-        /// Adds dependencies for Identity
+        /// Adds persistence for roles on json files, using one file per each application
         /// </summary>
         /// <param name="services"></param>
-        public static void AddIdentityInfrastructureServices(this IServiceCollection services, string[] applicationIds, string staticDataFolderPath)
+        public static IServiceCollection UsingRoleJsonPersistence(this IServiceCollection services, string[] applicationIds, string staticDataFolderPath)
         {
             if (applicationIds == null)
                 throw new ArgumentNullException(nameof(applicationIds));
@@ -67,7 +68,8 @@ namespace Umbrella.IdentityManagement
                 {
                     return new JsonRoleRepository(id, staticDataFolderPath);
                 });
-        }
 
+            return services;
+        }
     }
 }

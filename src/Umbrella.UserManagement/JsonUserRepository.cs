@@ -94,7 +94,7 @@ namespace Umbrella.UserManagement
 
             var existingItem = roles.SingleOrDefault(x => x.Name == user.Name);
             if (existingItem == null)
-                roles.Add(existingItem);
+                roles.Add(user);
             else
             {
                 existingItem.DisplayName = user.DisplayName;
