@@ -46,9 +46,10 @@ parameters:
 extends:
   template: dotnet-pakages-pipeline.1.2.yaml@coreTemplates
   parameters:
-    MajorVersion: 2
+    MajorVersion: 8
     MinorVersion: 0
-    PatchVersion: 1
+    PatchVersion: 0
+    TargetDotNetFramework: 8.x
     SonarScanEnabled: ${{ parameters.inputSonarScanEnabled }}
     SonarSettings:
       ProjectKey: Umbrella.UserManagement

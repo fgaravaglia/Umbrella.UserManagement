@@ -66,6 +66,7 @@ namespace Umbrella.IdentityManagement.Claims
                 // convert them in claims
                 this._Logger.LogInformation("Generating claims...");
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Name));
+                claims.Add(new Claim(ClaimTypes.Role, String.Join(";", user.Roles)));
                 foreach (var role in roles)
                 {
                     foreach (var claim in role.Claims)

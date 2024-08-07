@@ -115,8 +115,8 @@ namespace Umbrella.IdentityManagement.TokenManagement
             var token = GenerateToken(claims);
             this._Logger.LogInformation("End {Method}", nameof(AuthenticateClient));
             return new AuthenticationResponse()
-            { 
-                Token = token, 
+            {
+                Token = token,
                 Identity = identity
             };
         }
@@ -140,14 +140,14 @@ namespace Umbrella.IdentityManagement.TokenManagement
                 this._Logger.LogWarning("User {Username} not found", username);
                 return new AuthenticationResponse();
             }
-            
+
             // gets the user claims
-            var claims = this._ClaimProvider.GetByIdentityName(username,"DEFAULT").ToList();
+            var claims = this._ClaimProvider.GetByIdentityName(username, "DEFAULT").ToList();
             // create claimsIdentity
             var identity = new ClaimsIdentity(claims, "jwt");
 
             // create a token and returin it
-            var token = GenerateToken(claims);
+            var token = GenerateToken(identity.Claims.ToList());
             this._Logger.LogInformation("End {Method}", nameof(Authenticate));
             return new AuthenticationResponse()
             {
@@ -171,7 +171,7 @@ namespace Umbrella.IdentityManagement.TokenManagement
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 var userInfo = this._UserRepository.GetByKey(userId);
-                if(userInfo == null)
+                if (userInfo == null)
                     throw new InvalidOperationException($"Unable to find valid user {userId}");
                 return new TokenValidationResponse(jwtToken.Claims, userInfo);
             }
