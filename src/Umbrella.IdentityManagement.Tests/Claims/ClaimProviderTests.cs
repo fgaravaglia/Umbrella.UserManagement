@@ -41,7 +41,7 @@ namespace Umbrella.IdentityManagement.Tests.Claims
                 {
                     Role = ROLE_CLIENT,
                     Claims= new List<ClaimDefinitionDto>()
-                    { 
+                    {
                         new ClaimDefinitionDto(){  Type = "https://Umbrella/login", Value="R"}
                     }
                 },
@@ -161,17 +161,21 @@ namespace Umbrella.IdentityManagement.Tests.Claims
 
             //*********** Assert
             Assert.IsTrue(claims.Any());
-            Assert.AreEqual(expectedRole.Claims.Count + 1, claims.Count());
-            var claim = claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-            Assert.IsNotNull(claim, $"Unable to find claim of type {ClaimTypes.NameIdentifier}");
+            AssertClaimExists(claims, ClaimTypes.NameIdentifier, name);
+            AssertClaimExists(claims, ClaimTypes.Role, expectedRole.Role);
             foreach (var permission in expectedRole.Claims)
             {
-                claim = claims.SingleOrDefault(x => x.Type == permission.Type);
-                Assert.IsNotNull(claim, $"Unable to find claim of type {permission.Type}");
-                Assert.AreEqual(permission.Value, claim.Value,
-                                $"found wrong claim value for type {permission.Type}: found <{claim.Value}> instead of expected value <permission.Value>");
+                AssertClaimExists(claims, permission.Type, permission.Value);
             }
             Assert.Pass();
+        }
+
+        static void AssertClaimExists(IEnumerable<Claim> claims, string claimType, string expectedClaimValue)
+        {
+            var claim = claims.SingleOrDefault(x => x.Type == claimType);
+            Assert.IsNotNull(claim, $"Unable to find claim of type {claimType}");
+            Assert.That(claim.Value, Is.EqualTo(expectedClaimValue),
+                            $"found wrong claim value for type {claimType}: found <{claim.Value}> instead of expected value <{expectedClaimValue}");
         }
 
         [Test]
@@ -194,17 +198,13 @@ namespace Umbrella.IdentityManagement.Tests.Claims
 
             //*********** Assert
             Assert.IsTrue(claims.Any());
-            Assert.AreEqual(3, claims.Count());
-            var claim = claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-            Assert.IsNotNull(claim, $"Unable to find claim of type {ClaimTypes.NameIdentifier}");
+            AssertClaimExists(claims, ClaimTypes.NameIdentifier, name);
+            AssertClaimExists(claims, ClaimTypes.Role, ROLE_CLIENT + ";" + ROLE_CLIENT + "2");
             foreach (var role in this._Roles)
             {
                 foreach (var permission in role.Claims)
                 {
-                    claim = claims.SingleOrDefault(x => x.Type == permission.Type);
-                    Assert.IsNotNull(claim, $"Role {role.Role}: Unable to find claim of type {permission.Type}");
-                    Assert.AreEqual(permission.Value, claim.Value,
-                                    $"Role {role.Role}: found wrong claim value for type {permission.Type}: found <{claim.Value}> instead of expected value <permission.Value>");
+                    AssertClaimExists(claims, permission.Type, permission.Value);
                 }
             }
             Assert.Pass();
